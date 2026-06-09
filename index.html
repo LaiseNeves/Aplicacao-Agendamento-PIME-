@@ -1,0 +1,566 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal de Agendamento - Avaí F.C.</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(180deg, #eaf4fb 0%, #f8fbfe 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .phone {
+      width: 360px;
+      min-height: 720px;
+      background: #ffffff;
+      border: 8px solid #1c1c1c;
+      border-radius: 38px;
+      padding: 24px 20px 28px;
+      position: relative;
+      box-shadow: 0 20px 40px rgba(0, 70, 120, 0.18);
+      overflow: hidden;
+    }
+
+    .phone::before {
+      content: "";
+      width: 110px;
+      height: 24px;
+      background: #111;
+      border-radius: 20px;
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .screen {
+      display: none;
+      padding-top: 26px;
+      min-height: 660px;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 630px;
+      text-align: center;
+    }
+
+    .logo-box {
+      width: 150px;
+      height: 180px;
+      border: 3px solid #0a6fbc;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0a6fbc;
+      font-weight: bold;
+      font-size: 28px;
+      margin-bottom: 30px;
+      position: relative;
+      background: linear-gradient(180deg, #ffffff, #f5fbff);
+    }
+
+    .logo-box.small {
+      width: 92px;
+      height: 110px;
+      font-size: 20px;
+      margin-bottom: 14px;
+    }
+
+    .logo-star {
+      position: absolute;
+      top: -18px;
+      font-size: 18px;
+      color: #d8a907;
+    }
+
+    .title-main {
+      font-size: 21px;
+      color: #0b5f9c;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #8aa0b3;
+      margin-bottom: 14px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      color: #7f97aa;
+      font-size: 16px;
+    }
+
+    .menu {
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .hello {
+      font-size: 16px;
+      color: #6b8497;
+      font-weight: 600;
+    }
+
+    h1, h2, h3 {
+      color: #0b5f9c;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #61798d;
+      line-height: 1.4;
+    }
+
+    .input-group {
+      margin-top: 12px;
+    }
+
+    .input-group input,
+    .input-group select,
+    .input-group textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #cbe3f3;
+      border-radius: 10px;
+      outline: none;
+      font-size: 14px;
+      color: #315067;
+      background: #fff;
+    }
+
+    .input-group textarea {
+      resize: none;
+      min-height: 80px;
+    }
+
+    .btn {
+      width: 100%;
+      background: #0b79c9;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 16px;
+      transition: 0.2s;
+    }
+
+    .btn:hover {
+      background: #0969ad;
+    }
+
+    .btn-secondary {
+      background: #e7f3fb;
+      color: #0b5f9c;
+    }
+
+    .btn-secondary:hover {
+      background: #d8ebf8;
+    }
+
+    .link-row {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: center;
+    }
+
+    .link-row a {
+      text-decoration: none;
+      color: #5d7385;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .section-title {
+      margin-top: 24px;
+      margin-bottom: 14px;
+      font-size: 18px;
+      color: #6f8493;
+      font-weight: 600;
+    }
+
+    .event-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .event-card {
+      border: 2px solid #cfe7f6;
+      border-radius: 12px;
+      min-height: 110px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #fbfeff;
+    }
+
+    .event-icon {
+      font-size: 34px;
+      color: #0a5f9a;
+      margin-top: 6px;
+      text-align: center;
+    }
+
+    .event-text {
+      text-align: center;
+      font-size: 12px;
+      color: #6d7d8a;
+      line-height: 1.3;
+    }
+
+    .top-block {
+      text-align: center;
+      margin-top: 22px;
+      margin-bottom: 10px;
+    }
+
+    .mascot {
+      font-size: 62px;
+      margin-bottom: 8px;
+    }
+
+    .brand-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0b6eb4;
+      letter-spacing: 1px;
+    }
+
+    .brand-subtitle {
+      color: #93a9b9;
+      margin-bottom: 16px;
+    }
+
+    .label {
+      display: block;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #6c7f8d;
+    }
+
+    .notice {
+      margin-top: 16px;
+      padding: 14px;
+      background: #eef8ff;
+      border-left: 4px solid #0b79c9;
+      border-radius: 10px;
+      color: #587386;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .summary {
+      margin-top: 18px;
+      background: #f7fbfe;
+      border: 2px solid #dcecf7;
+      border-radius: 12px;
+      padding: 14px;
+      text-align: left;
+      color: #4f6577;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 18px;
+      color: #8da3b3;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="phone">
+
+      <!-- TELA 1 -->
+      <section id="screen-welcome" class="screen active">
+        <div class="center">
+          <div class="logo-box">
+            <span class="logo-star">★</span>
+            AVAÍ
+          </div>
+          <div class="title-main">Bem vindo!</div>
+          <button class="btn" onclick="showScreen('screen-login')" style="margin-top: 30px;">Entrar</button>
+        </div>
+      </section>
+
+      <!-- TELA 2 -->
+      <section id="screen-login" class="screen">
+        <div class="top-block">
+          <div class="mascot">🦁</div>
+          <div class="brand-title">AVAÍ F.C</div>
+          <div class="brand-subtitle">Centro Cultural</div>
+        </div>
+
+        <div class="input-group">
+          <input type="email" placeholder="E-mail" />
+        </div>
+
+        <div class="input-group">
+          <input type="password" placeholder="Senha" />
+        </div>
+
+        <button class="btn" onclick="showScreen('screen-home')">ENTRAR</button>
+
+        <div class="link-row">
+          <a onclick="alert('Fluxo apenas visual para o piloto.')">Esqueci minha senha</a>
+          <a onclick="alert('Cadastro ainda não implementado neste piloto.')">Cadastrar</a>
+        </div>
+      </section>
+
+      <!-- TELA 3 -->
+      <section id="screen-home" class="screen">
+        <div class="header">
+          <div class="menu">☰</div>
+          <div class="hello">Olá Felipe</div>
+        </div>
+
+        <button class="btn" onclick="showScreen('screen-form')">AGENDAR VISITA</button>
+
+        <div class="section-title">Próximos eventos:</div>
+
+        <div class="event-grid">
+          <div class="event-card">
+            <div class="event-icon">⚽</div>
+            <div class="event-text">Aula de futebol<br>27/11/24</div>
+          </div>
+
+          <div class="event-card">
+            <div class="event-icon">🎨</div>
+            <div class="event-text">Oficina de arte<br>14/12/24</div>
+          </div>
+
+          <div class="event-card">
+            <div class="event-icon">🎭</div>
+            <div class="event-text">Aula de teatro<br>17/01/25</div>
+          </div>
+
+          <div class="event-card">
+            <div class="event-icon">🎶</div>
+            <div class="event-text">Oficina de música<br>28/02/25</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TELA 4 -->
+      <section id="screen-form" class="screen">
+        <div class="header">
+          <div class="menu" onclick="showScreen('screen-home')">←</div>
+          <div class="hello">Agendamento</div>
+        </div>
+
+        <p style="margin-bottom: 10px;">Preencha os dados abaixo</p>
+
+        <label class="label">Nome</label>
+        <div class="input-group">
+          <input id="nome" type="text" placeholder="Seu nome" />
+        </div>
+
+        <label class="label">E-mail</label>
+        <div class="input-group">
+          <input id="email" type="email" placeholder="Seu e-mail" />
+        </div>
+
+        <label class="label">Telefone</label>
+        <div class="input-group">
+          <input id="telefone" type="text" placeholder="Seu telefone" />
+        </div>
+
+        <label class="label">Nome da instituição</label>
+        <div class="input-group">
+          <input id="instituicao" type="text" placeholder="Nome da instituição" />
+        </div>
+
+        <label class="label">E-mail da instituição</label>
+        <div class="input-group">
+          <input id="emailInstituicao" type="email" placeholder="E-mail institucional" />
+        </div>
+
+        <label class="label">Telefone da instituição</label>
+        <div class="input-group">
+          <input id="telefoneInstituicao" type="text" placeholder="Telefone institucional" />
+        </div>
+
+        <label class="label">Endereço da instituição</label>
+        <div class="input-group">
+          <input id="endereco" type="text" placeholder="Endereço" />
+        </div>
+
+        <label class="label">Faixa etária / visitantes</label>
+        <div class="input-group">
+          <input id="visitantes" type="text" placeholder="Ex: 25 alunos do ensino fundamental" />
+        </div>
+
+        <button class="btn" onclick="goToSchedule()">CONCLUIR</button>
+      </section>
+
+      <!-- TELA 5 -->
+      <section id="screen-date" class="screen">
+        <div class="header">
+          <div class="menu" onclick="showScreen('screen-form')">←</div>
+          <div class="hello">Agendamento</div>
+        </div>
+
+        <p style="margin-bottom: 12px;">Escolha a data desejada</p>
+
+        <label class="label">Data desejada</label>
+        <div class="input-group">
+          <input id="data" type="date" />
+        </div>
+
+        <label class="label">Horário desejado</label>
+        <div class="input-group">
+          <select id="horario">
+            <option value="">Selecione um horário</option>
+            <option>14h00</option>
+            <option>14h30</option>
+            <option>15h00</option>
+            <option>15h30</option>
+            <option>16h00</option>
+          </select>
+        </div>
+
+        <div class="notice">
+          Um e-mail com a confirmação da reserva será enviado juntamente com as regras e documentos que deverão ser entregues no dia da visita.
+          <br><br>
+          Será um prazer recebê-los. Até breve!
+        </div>
+
+        <button class="btn" onclick="finishSchedule()">FINALIZAR</button>
+        <button class="btn btn-secondary" onclick="showScreen('screen-form')">VOLTAR</button>
+      </section>
+
+      <!-- TELA 6 -->
+      <section id="screen-confirm" class="screen">
+        <div class="center" style="justify-content: flex-start; padding-top: 60px;">
+          <div class="logo-box small">
+            <span class="logo-star">★</span>
+            AVAÍ
+          </div>
+
+          <h2>Solicitação enviada!</h2>
+          <p style="margin-top: 8px; text-align: center;">
+            Seu pedido de visita foi registrado no piloto navegável.
+          </p>
+
+          <div class="summary" id="summaryBox"></div>
+
+          <button class="btn" onclick="showScreen('screen-home')">VOLTAR AO INÍCIO</button>
+
+          <div class="footer-note">
+            Protótipo visual do portal de agendamento
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script>
+    function showScreen(screenId) {
+      const screens = document.querySelectorAll('.screen');
+      screens.forEach(screen => screen.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    function goToSchedule() {
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const telefone = document.getElementById('telefone').value.trim();
+      const instituicao = document.getElementById('instituicao').value.trim();
+
+      if (!nome || !email || !telefone || !instituicao) {
+        alert('Preencha pelo menos nome, e-mail, telefone e instituição.');
+        return;
+      }
+
+      showScreen('screen-date');
+    }
+
+    function finishSchedule() {
+      const data = document.getElementById('data').value;
+      const horario = document.getElementById('horario').value;
+
+      if (!data || !horario) {
+        alert('Escolha a data e o horário desejado.');
+        return;
+      }
+
+      const nome = document.getElementById('nome').value;
+      const email = document.getElementById('email').value;
+      const telefone = document.getElementById('telefone').value;
+      const instituicao = document.getElementById('instituicao').value;
+      const emailInstituicao = document.getElementById('emailInstituicao').value;
+      const telefoneInstituicao = document.getElementById('telefoneInstituicao').value;
+      const endereco = document.getElementById('endereco').value;
+      const visitantes = document.getElementById('visitantes').value;
+
+      const resumo = `
+        <strong>Nome:</strong> ${nome}<br>
+        <strong>E-mail:</strong> ${email}<br>
+        <strong>Telefone:</strong> ${telefone}<br>
+        <strong>Instituição:</strong> ${instituicao}<br>
+        <strong>E-mail da instituição:</strong> ${emailInstituicao || '-'}<br>
+        <strong>Telefone da instituição:</strong> ${telefoneInstituicao || '-'}<br>
+        <strong>Endereço:</strong> ${endereco || '-'}<br>
+        <strong>Visitantes:</strong> ${visitantes || '-'}<br>
+        <strong>Data desejada:</strong> ${data}<br>
+        <strong>Horário desejado:</strong> ${horario}<br>
+        <strong>Status:</strong> Solicitação enviada para análise
+      `;
+
+      document.getElementById('summaryBox').innerHTML = resumo;
+      showScreen('screen-confirm');
+    }
+  </script>
+</body>
+</html>
